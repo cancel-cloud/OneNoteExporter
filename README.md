@@ -4,9 +4,9 @@ Thinking of moving your OneNote collection to another note-taking app such as Ob
 
 OneNote Exporter (in short, `one`) is a PowerShell program which is capable of exporting all your OneNote notes to any [Pandoc-supported plain text markup format](https://pandoc.org/MANUAL.html) using the OneNote Object Model and Pandoc. That is to say: markdown, org-mode and more!
 
-## 2026 recovery workflow
+## 2026 recovery update
 
-This fork keeps the original `one.ps1` exporter and adds a recovery companion at `tools\Invoke-OneNoteRecovery.ps1`. The recovery script is for exports where an older OneNote workflow produced `OneNote-Export-failed-pages.log` entries because OneNote COM publish failed, Windows path lengths were too long, long file names exceeded what OneNote could publish reliably, or HTML/PDF files were written into a recovery folder instead of the original export tree.
+This update keeps the original `one.ps1` exporter and adds a recovery companion at `tools\Invoke-OneNoteRecovery.ps1`. The recovery script is for exports where an older OneNote workflow produced `OneNote-Export-failed-pages.log` entries because OneNote COM publish failed, Windows path lengths were too long, long file names exceeded what OneNote could publish reliably, or HTML/PDF files were written into a recovery folder instead of the original export tree.
 
 Recommended Windows setup in 2026:
 
