@@ -6,7 +6,7 @@ OneNote Exporter (in short, `one`) is a PowerShell program which is capable of e
 
 ## 2026 recovery workflow
 
-This fork keeps the original `one.ps1` exporter and adds a recovery companion at `tools\Invoke-OneNoteRecovery.ps1`. The recovery script is for exports where an older OneNote workflow produced `OneNote-Export-failed-pages.log` entries because OneNote COM publish failed, Windows path lengths were too long, or HTML/PDF files were written into a recovery folder instead of the original export tree.
+This fork keeps the original `one.ps1` exporter and adds a recovery companion at `tools\Invoke-OneNoteRecovery.ps1`. The recovery script is for exports where an older OneNote workflow produced `OneNote-Export-failed-pages.log` entries because OneNote COM publish failed, Windows path lengths were too long, long file names exceeded what OneNote could publish reliably, or HTML/PDF files were written into a recovery folder instead of the original export tree.
 
 Recommended Windows setup in 2026:
 
@@ -51,6 +51,16 @@ The recovery steps can also be run one at a time:
 ```
 
 Recovered output is indexed in `OneNote-Export\_recovered\_recovered-index.csv`. Use `-Overwrite` only when you intentionally want to replace previous recovered copies.
+
+### How the rescue process works
+
+The recovery tool reads `OneNote-Export-failed-pages.log` and uses the saved OneNote page IDs to publish those failed pages again. This helps when the original export mostly worked but some pages failed because of long file names, deeply nested section paths, or OneNote COM path limits.
+
+The `RetryV1` step first publishes each failed page into a temporary recovery folder and then copies the result back to the intended export location when possible. If the original location is still too long or problematic, it keeps the file in `OneNote-Export-Recovered` with shortened path components.
+
+The `RetryV2` step retries the remaining failures through short temporary paths by creating a temporary `subst` drive such as `O:`. That gives OneNote a much shorter destination path, which is useful for notebooks with long page titles, long file names, or deeply nested section groups.
+
+The `Merge` step copies successful rescue output into `OneNote-Export\_recovered` and writes `_recovered-index.csv`, so every rescued file can be traced back to the original failed target path. The two fix steps handle older V1 recovery layouts and flatten any remaining difficult HTML/PDF copies into short folders.
 
 ---
 **Notable alternatives**

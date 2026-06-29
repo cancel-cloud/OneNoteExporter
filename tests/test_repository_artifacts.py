@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-3.0
+
 from pathlib import Path
 import re
 import unittest
@@ -35,6 +37,9 @@ class RepositoryArtifactTests(unittest.TestCase):
         self.assertIn("tools\\Invoke-OneNoteRecovery.ps1", readme)
         self.assertIn("OneNote-Export-failed-pages.log", readme)
         self.assertIn("PowerShell 5.1", readme)
+        self.assertIn("long file names", readme.lower())
+        self.assertIn("short temporary paths", readme.lower())
+        self.assertIn("_recovered-index.csv", readme)
 
     def test_gitignore_ignores_generated_export_artifacts(self):
         gitignore = (ROOT / ".gitignore").read_text(encoding="utf-8")

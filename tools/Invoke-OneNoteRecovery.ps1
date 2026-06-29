@@ -1,3 +1,5 @@
+<# SPDX-License-Identifier: GPL-3.0 #>
+
 <#
 .SYNOPSIS
     Retry and merge failed OneNote PDF/HTML exports.
