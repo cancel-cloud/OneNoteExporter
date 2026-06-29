@@ -6,5 +6,18 @@
 # personal config
 config.ps1
 
-# ntoes
-notes/*
+# generated exports and local recovery output
+notes/
+OneNote-Export/
+OneNote-Export-Recovered/
+ONR2/
+_recovered/
+
+# runtime noise
+*.log
+*.tmp
+*.bak
+*.cache
+*.csv
+__pycache__/
+*.pyc

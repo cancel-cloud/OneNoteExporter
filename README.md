@@ -4,6 +4,54 @@ Thinking of moving your OneNote collection to another note-taking app such as Ob
 
 OneNote Exporter (in short, `one`) is a PowerShell program which is capable of exporting all your OneNote notes to any [Pandoc-supported plain text markup format](https://pandoc.org/MANUAL.html) using the OneNote Object Model and Pandoc. That is to say: markdown, org-mode and more!
 
+## 2026 recovery workflow
+
+This fork keeps the original `one.ps1` exporter and adds a recovery companion at `tools\Invoke-OneNoteRecovery.ps1`. The recovery script is for exports where an older OneNote workflow produced `OneNote-Export-failed-pages.log` entries because OneNote COM publish failed, Windows path lengths were too long, or HTML/PDF files were written into a recovery folder instead of the original export tree.
+
+Recommended Windows setup in 2026:
+
+* Windows 10 or 11
+* Windows PowerShell 5.1 for OneNote COM automation
+* OneNote desktop installed and opened before running exports
+* Microsoft Word desktop and Pandoc for the main `one.ps1` markdown/org export path
+
+Normal export:
+
+```powershell
+Copy-Item .\config_example.ps1 .\config.ps1
+notepad .\config.ps1
+.\one.ps1
+```
+
+Recovery after a failed PDF/HTML export log exists:
+
+```powershell
+.\tools\Invoke-OneNoteRecovery.ps1 -Step All
+```
+
+If your export folders are not under Downloads, pass the paths explicitly:
+
+```powershell
+.\tools\Invoke-OneNoteRecovery.ps1 `
+  -Step All `
+  -FailedLog "D:\OneNote\OneNote-Export-failed-pages.log" `
+  -ExportRoot "D:\OneNote\OneNote-Export" `
+  -RecoveryRoot "D:\OneNote\OneNote-Export-Recovered" `
+  -ShortRoot "D:\OneNote\ONR2"
+```
+
+The recovery steps can also be run one at a time:
+
+```powershell
+.\tools\Invoke-OneNoteRecovery.ps1 -Step RetryV1
+.\tools\Invoke-OneNoteRecovery.ps1 -Step RetryV2
+.\tools\Invoke-OneNoteRecovery.ps1 -Step Merge
+.\tools\Invoke-OneNoteRecovery.ps1 -Step FixV1Misclassified
+.\tools\Invoke-OneNoteRecovery.ps1 -Step FixV1Flat
+```
+
+Recovered output is indexed in `OneNote-Export\_recovered\_recovered-index.csv`. Use `-Overwrite` only when you intentionally want to replace previous recovered copies.
+
 ---
 **Notable alternatives**
 

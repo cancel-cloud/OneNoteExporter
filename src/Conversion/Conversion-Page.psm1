@@ -243,7 +243,7 @@ Function Convert-OneNotePage {
                             # appropriate Markup Pack
                             $content[6..($content.Count - 1)]
                         }
-                        else{~
+                        else {
                             $content
                         }
 
